@@ -2,11 +2,9 @@
 
 **Numerical Implementation and Experimental Validation of the EUCLID Framework for Linear Viscoelastic Parameter Identification**
 
-*Master's Thesis — Kali Satya Sri Charan Undamatla*
-*Institute of Structural Analysis (ISD), Technische Universität Braunschweig*
-*Fraunhofer Institute for Mechanics of Materials (IWM), March 2026*
+*Master's Thesis - Kali Satya Sri Charan Undamatla*
 
----
+------
 
 ## Overview
 
@@ -255,19 +253,14 @@ Synthetic validation achieves approximately **1% relative error** across multipl
 
 ---
 
-## Experimental Datasets
+## Experimental example Datasets
 
 PA6 (Polyamide 6) tensile creep specimens tested at Fraunhofer IWM:
 - Uniaxial creep, pinned-and-clamped grips, loading direction +y
 - DIC measurements at ~1 Hz using GOM Correlate software
 - Specimen dimensions: 90 mm total length, 24 mm width, 1 mm thickness
 
-| Exp | Specimen | Geometry | Nodes | Time [s] |
-|-----|----------|----------|-------|----------|
-| 800 | Synthetic | Plain rectangle (structured 5×13 mesh) | 65 | 600 |
-| 900 | Real — Plain PA6 | Rectangle ~24×65 mm, no holes | ~467 (DIC-mapped) | 614 |
-
-> The elliptical-hole and three-hole specimen datasets from the thesis are not included in this public repository.
+> The experimental datasets elliptical-hole and three-hole specimen from the thesis are not included in this public repository for confidentiality reasons.
 
 ---
 
@@ -291,13 +284,13 @@ PA6 (Polyamide 6) tensile creep specimens tested at Fraunhofer IWM:
 | `EXPERIMENT_NUMBER` | 800 | Dataset to read from standard_FE_dataset/ |
 | `N_MAXWELL_SHEAR/BULK` | 150 | Prony branch counts N_G, N_K |
 | `TAU_MIN / TAU_MAX` | 1 / 600 s | Relaxation time library range |
-| `LAMBDA_INTERIOR` | 0.0 | Interior equilibrium weight (0 = boundary only) |
+| `LAMBDA_INTERIOR` | 1.0 | Interior equilibrium weight |
 | `LAMBDA_BOUNDARY` | 1.0 | Boundary traction weight |
 | `APPLY_CLUSTERING` | True | Merge closely-spaced tau values |
 | `CLUSTERING_RANGE` | 0.3 | Merging threshold (30% relative distance) |
 
 **Recommended settings:**
-- Synthetic data: `LAMBDA_INTERIOR = 0.0, LAMBDA_BOUNDARY = 1.0`
+- Synthetic data: `LAMBDA_INTERIOR = 1.0, LAMBDA_BOUNDARY = 1.0`
 - Real DIC data: `LAMBDA_INTERIOR = 1.0, LAMBDA_BOUNDARY = 1.0`
 
 ---
