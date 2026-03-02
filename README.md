@@ -14,8 +14,8 @@ The identification problem is formulated in **plane stress** for thin rectangula
 
 Two complementary data paths are supported:
 
-- **Synthetic path** — Forward FEM simulations with known ground-truth parameters θ_true generate benchmark datasets for validation
-- **Experimental path** — Raw Digital Image Correlation (DIC) displacement fields are preprocessed into FE-compatible inputs
+- **Synthetic path** : Forward FEM simulations with known ground-truth parameters θ_true generate benchmark datasets for validation
+- **Experimental path** : Raw Digital Image Correlation (DIC) displacement fields are preprocessed into FE-compatible inputs
 
 Both paths converge to a **Standardized FE Dataset** D = {**X**, conn, **U**, **F**, t} that serves as the unified input to the inverse solver.
 
