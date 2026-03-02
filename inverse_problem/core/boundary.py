@@ -95,21 +95,7 @@ class TopBottomForce(BoundaryCondition):
         return edges
     
     def get_force_values(self, edge_name: str, timestep: int, force_data: np.ndarray) -> float:
-        """
-        Get force value to match MATLAB TD_inverseProblem.m line 406.
-
-        Force convention matching MATLAB:
-        - F[0, t] = top Y force (applied load - constant in creep test)
-        - F[1, t] = bottom Y force (reaction force - time-varying)
-
-        MATLAB line 406:
-        R_bnd{t} = [0; F(2,t); 0; 0; 0; 0; 0; F(1,t)];
-                   [bX  bY    lX  lY  rX  rY  tX  tY  ]
-
-        Where F(1,t) = row 0 in Python (top), F(2,t) = row 1 in Python (bottom)
-
-        Hole boundaries are traction-free (force = 0)
-        """
+       
         if edge_name == 'top_y':
             return force_data[0, timestep]  # Top applied force
         elif edge_name == 'bottom_y':
@@ -219,8 +205,6 @@ class BoundaryAssembler:
         """
         Assemble interior equations (EXCLUDING boundary DOFs).
 
-        MATLAB MATCHING: Assembles for all DOFs, then removes boundary DOFs
-        following TD_inverseProblem.m lines 384-399.
 
         A_int @ θ ≈ R_int (measured displacements at interior nodes only)
 
@@ -233,14 +217,14 @@ class BoundaryAssembler:
 
         print("\nAssembling interior equations...")
 
-        # Get boundary DOFs to exclude (MATLAB: externalDoFs)
+        # Get boundary DOFs to exclude 
         edge_dofs = self.bc.get_boundary_edges(self.mesh)
         external_dofs = set()
         for dofs in edge_dofs.values():
             external_dofs.update(dofs)
         external_dofs = sorted(list(external_dofs))
 
-        # Create index vector (MATLAB: index_vector)
+        # Create index vector 
         # True for interior DOFs, False for boundary DOFs
         index_vector = np.ones(n_dofs, dtype=bool)
         index_vector[external_dofs] = False
@@ -253,7 +237,7 @@ class BoundaryAssembler:
         A_int_list = []
         R_int_list = []
 
-        for t in range(1, n_time):  # MATLAB: for t = 1:timesteps (includes all frames)
+        for t in range(1, n_time):  #  for t = 1:timesteps (includes all frames)
             # For each DOF, sum contributions from all adjacent elements
             A_int_t = np.zeros((n_dofs, n_params))
             R_int_t = np.zeros(n_dofs)  # Will be zero for interior (equilibrium)
@@ -268,7 +252,7 @@ class BoundaryAssembler:
                 for local_idx, global_dof in enumerate(elem_dofs):
                     A_int_t[global_dof, :] += ae_t[local_idx, :]
 
-            # MATLAB matching: Remove boundary DOFs (line 399)
+            # Remove boundary DOFs 
             A_int_t = A_int_t[index_vector, :]
             R_int_t = R_int_t[index_vector]
 
@@ -300,7 +284,7 @@ class BoundaryAssembler:
         n_time = self.exp_data.n_timesteps
         n_params = self.system_assembler.material.n_params
 
-        # FIXED ORDER for outer boundaries (matches trail_inv.py edgeDoFs order)
+        
         edge_list = [
             ('bottom_x', self.edge_dofs['bottom_x']),
             ('bottom_y', self.edge_dofs['bottom_y']),

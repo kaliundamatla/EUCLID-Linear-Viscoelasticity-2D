@@ -128,7 +128,7 @@ class SyntheticDataGenerator:
         # 3. Export force field F.csv
         print("\n3. Exporting force field (F.csv)...")
         F_file = exp_dir / "F.csv"
-        # MATLAB format (lines 951-955):
+
         # Row 0: Constant applied load = edge_length * load_magnitude / 1000
         # Row 1: Reaction forces at bottom (time-varying)
         # Row 2-3: Zeros
@@ -150,7 +150,7 @@ class SyntheticDataGenerator:
                 edge_len = np.linalg.norm(p2 - p1)
                 top_edge_length += edge_len
 
-        # MATLAB: Force(1,:) = 20*q0*ones(size(time))/1000
+        #  Force(1,:) = 20*q0*ones(size(time))/1000
         # where 20 = Lx (width), q0 = load_magnitude
         # Python: use computed edge length instead of width (more accurate for Delaunay mesh)
         constant_applied_load = top_edge_length * self.load_magnitude / 1000.0
@@ -160,7 +160,7 @@ class SyntheticDataGenerator:
         print(f"   Constant applied load: {constant_applied_load:.6f} kN")
 
         # Compute reaction forces at bottom boundary
-        # MATLAB: RBottomY = KKold(dof_bottomY,:)*Z - Bet(dof_bottomY)
+        #  RBottomY = KKold(dof_bottomY,:)*Z - Bet(dof_bottomY)
         # This is: K_elastic * U - F_hist
         bottom_nodes = np.where(self.mesh.coord[:, 3] == 2)[0]
         bottom_y_dofs = 2 * bottom_nodes + 1
@@ -194,7 +194,7 @@ class SyntheticDataGenerator:
             # Sum reactions and convert to kN
             F_reduced[1, nt] = np.sum(reaction_total) / 1000.0
 
-            # Rows 2-3: zeros (MATLAB format)
+            # Rows 2-3: zeros 
 
         np.savetxt(F_file, F_reduced, delimiter=',', fmt='%.12e')
         print(f"   F.csv: {F_reduced.shape} (4 force components x nTimesteps)")
@@ -279,7 +279,7 @@ if __name__ == "__main__":
     Run: python data_generation.py
     """
     from mesh import MeshGenerator
-    from material import create_matlab_reference_material
+    from material import create_reference_material
 
     print("="*70)
     print("SYNTHETIC DATA GENERATION - EXAMPLE")
@@ -300,9 +300,9 @@ if __name__ == "__main__":
     mesh = MeshGenerator(width=width, height=height, nx=nx, ny=ny)
     coord, conne = mesh.generate()
 
-    # 2. Create ground truth material (MATLAB reference)
+    # 2. Create ground truth material 
     print("\n[2/4] Creating ground truth material...")
-    material = create_matlab_reference_material()
+    material = create_reference_material()
 
     # 3. Generate synthetic data
     print("\n[3/4] Running forward simulation...")

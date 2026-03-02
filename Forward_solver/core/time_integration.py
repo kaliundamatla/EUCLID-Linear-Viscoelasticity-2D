@@ -72,7 +72,6 @@ class ForwardTimeIntegrator:
     Time integration for forward solver.
 
     Computes beta coefficients and history variables for viscoelastic evolution.
-    Uses the same implicit midpoint rule as MATLAB and inverse problem.
     """
 
     def __init__(self, mesh, material: ViscoelasticMaterial):
@@ -141,8 +140,6 @@ class ForwardTimeIntegrator:
 
         At t=0: beta = [dt/(2*tau + dt)] * strain
 
-        Matches MATLAB line 61-62 and beta_computation.py line 61-62.
-
         Args:
             U: Global displacement vector at t=0 (2*nNodes,)
             dt: Time step size [s]
@@ -158,7 +155,7 @@ class ForwardTimeIntegrator:
             self.history.epsG[:, ie] = epsG
             self.history.tht[0, ie] = tht
 
-            # Beta at t=0 (MATLAB lines 538-540, beta_computation.py lines 61-62)
+            
             # betaG = [dt/(2*tau_G + dt)] * epsG (broadcast over Maxwell branches)
             weight_G = dt / (2 * self.material.tau_G + dt)  # (nG,)
             self.history.betaG[:, :, ie] = np.outer(epsG, weight_G)  # (3, nG)
@@ -179,7 +176,6 @@ class ForwardTimeIntegrator:
             beta^(n-1) = [dt/(2*tau+dt)] * (eps^(n-1) - eps_v^(n-1))
                          + [2*tau/(2*tau+dt)] * eps_v^(n-1)
 
-        Matches MATLAB lines 649-650 and beta_computation.py lines 66-76.
 
         Args:
             U: Global displacement vector at timestep n (2*nNodes,)
@@ -203,7 +199,6 @@ class ForwardTimeIntegrator:
             tht_nm1 = self.history.tht_nm1[0, ie]            # scalar
             thtv_nm1 = self.history.thtv_nm1[0, :, ie]      # (nK,)
 
-            # Compute beta coefficients (MATLAB lines 649-650)
             # Deviatoric: beta_G^(n-1) = w1 * (eps_G^(n-1) - eps_vG^(n-1)) + w2 * eps_vG^(n-1)
             w1_G = dt / (2 * self.material.tau_G + dt)          # (nG,)
             w2_G = (2 * self.material.tau_G) / (2 * self.material.tau_G + dt)  # (nG,)
@@ -221,7 +216,6 @@ class ForwardTimeIntegrator:
                 w1_K * (tht_nm1 - thtv_nm1) + w2_K * thtv_nm1
             )
 
-            # Update viscous strains (MATLAB lines 643-647, beta_computation.py lines 78-79)
             # eps_vG^n = [dt/(2*tau+dt)] * eps_G^n + beta_G^(n-1)
             self.history.epsvG[:, :, ie] = (
                 np.outer(epsG, w1_G) + self.history.betaG[:, :, ie]

@@ -1,12 +1,5 @@
 """
-Full-scale realistic forward simulation matching MATLAB configuration.
-
-This script runs a complete forward simulation with:
-- MATLAB mesh dimensions (20mm x 50mm, 11x26 nodes)
-- MATLAB material (MAT3.5)
-- MATLAB boundary conditions and loading
-- Long time simulation with realistic timesteps
-- Complete visualization and result export
+Full-scale realistic forward simulation.
 """
 
 import sys
@@ -17,7 +10,7 @@ from pathlib import Path
 from datetime import datetime
 
 from Forward_solver.core.mesh import MeshGenerator, Node
-from Forward_solver.core.material import create_matlab_reference_material
+from Forward_solver.core.material import create_reference_material
 from Forward_solver.core.data_generation import SyntheticDataGenerator
 
 # Complex geometry support (Phase 2 & 3)
@@ -576,7 +569,7 @@ def create_simulation_report(config, results_dir: Path):
         f.write(f"  Nodes: {config['nx']} × {config['ny']} = {config['nx']*config['ny']}\n")
         f.write(f"  Elements: ~{2*(config['nx']-1)*(config['ny']-1)} (triangles)\n\n")
 
-        f.write(f"Material (MAT3.5 - MATLAB Reference):\n")
+        f.write(f"Material ( Reference):\n")
         f.write(f"  Deviatoric:\n")
         f.write(f"    G_inf = {config['material'].G_inf} MPa\n")
         f.write(f"    G = {config['material'].G} MPa\n")
@@ -657,17 +650,17 @@ def run_full_simulation(
     - Complex geometry (804-806): Uses pygmsh + meshio for holes/ellipses
 
     Args:
-        width: Domain width [mm] (MATLAB: 20mm)
-        height: Domain height [mm] (MATLAB: 50mm)
-        nx: Nodes in x-direction (MATLAB: 11)
-        ny: Nodes in y-direction (MATLAB: 26)
-        dt: Time step [s] (MATLAB: varies, typically 0.1s)
-        n_timesteps: Number of timesteps (MATLAB: typically 100-1000)
-        load: Distributed traction [N/mm] (MATLAB: q0=50)
+        width: Domain width [mm] 
+        height: Domain height [mm] 
+        nx: Nodes in x-direction 
+        ny: Nodes in y-direction 
+        dt: Time step [s] 
+        n_timesteps: Number of timesteps 
+        load: Distributed traction [N/mm] 
               Sign convention:
               - Positive (+50) = TENSION (upward traction on top surface)
               - Negative (-50) = COMPRESSION (downward traction on top surface)
-              MATLAB uses q0=50 (positive) for TENSION test
+               uses q0=50 (positive) for TENSION test
         experiment_id: Experiment number for output folder (default: 800)
         output_name: Optional custom output name (overrides experiment_id)
         holes: DEPRECATED for 804+. List of (center_x, center_y, radius) tuples
@@ -675,7 +668,7 @@ def run_full_simulation(
                configs/geometry_config_XXX.py instead.
         mesh_import_dir: Optional path to import existing mesh (coord.csv, conne.txt)
                         If provided, bypasses mesh generation and uses pre-existing mesh
-                        Example: Path('./synthetic_data/817') for MATLAB imported geometry
+                        Example: Path('./synthetic_data/817') for  imported geometry
         use_complex_geometry: Force complex geometry mode (auto-detected if None)
                              If None, automatically detects based on experiment_id:
                              - experiment_id >= 804: Complex mode (pygmsh)
@@ -805,8 +798,8 @@ def run_full_simulation(
             print(f"            For complex geometries, use experiment_id >= 804 with geometry configs.")
 
     # Step 2: Create material
-    print("\n[2/6] Loading material (MATLAB MAT3.5)...")
-    material = create_matlab_reference_material()
+    print("\n[2/6] Loading material ...")
+    material = create_reference_material()
     print(f"  [OK] Material loaded: {material}")
 
     # Step 3: Run simulation

@@ -48,9 +48,6 @@ class MeshGenerator:
     - Export to inverse problem format
 
     For complex geometries with holes, use geometry_builder.py with pygmsh.
-
-    Based on MATLAB implementation (main_FEM_2D_LinViscoElast_TD_20_06.m)
-    and Python simulation (simulation_FEM_2D_LinViscoElast_TD_v2.py).
     """
 
     def __init__(self, width: float, height: float, nx: int, ny: int):
@@ -116,9 +113,8 @@ class MeshGenerator:
 
         n_nodes = nodes_xy.shape[0]
 
-        # 2. Create structured triangulation (MATLAB style)
+        # 2. Create structured triangulation 
         # Each rectangular cell (i,j) -> (i+j*nx) is divided into 2 triangles
-        # Following MATLAB convention from lines 83-110
         print(f"  Creating structured triangulation...")
         elements_list = []
 
@@ -326,7 +322,7 @@ class MeshGenerator:
 
         Creates:
             coord.csv: Node coordinates with boundary flags
-            conne.txt: Element connectivity (1-indexed for MATLAB compatibility)
+            conne.txt: Element connectivity 
         """
         if self.coord is None or self.conne is None:
             raise RuntimeError("Mesh not generated. Call generate() first.")

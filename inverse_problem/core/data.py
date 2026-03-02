@@ -10,18 +10,7 @@ from typing import Optional
 
 
 class ExperimentData:
-    """
-    Loads and validates experimental data from EUCLID tests.
-    
-    Expected directory structure:
-        Preprocessing/outputs/
-        â””â”€â”€ experiment_number/
-            â”œâ”€â”€ coord.csv      # Node coordinates [id, x, y, ...]
-            â”œâ”€â”€ conne.txt      # Connectivity [elem_id, n1, n2, n3]
-            â”œâ”€â”€ U.csv          # Displacements [nDOF Ã— nTime]
-            â”œâ”€â”€ F.csv          # Forces [nForcePoints Ã— nTime]
-            â””â”€â”€ time.csv       # Time vector [nTime]
-    """
+
     
     def __init__(self, experiment_number: int, base_path: Path = None):
         """

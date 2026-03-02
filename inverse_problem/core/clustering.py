@@ -2,7 +2,7 @@
 Parameter clustering for Prony series.
 Merges nearby relaxation times using weighted averaging.
 
-EXACT translation from MATLAB clustering logic.
+
 """
 
 import numpy as np
@@ -14,7 +14,7 @@ class ParameterClusterer:
     """
     Clusters Prony series parameters by merging nearby relaxation times.
     
-    Algorithm (from MATLAB):
+    Algorithm :
     - If two consecutive tau values are within clusteringRange*tau(i), merge them
     - Weighted average: tau_merged = (G1*tau1 + G2*tau2)/(G1 + G2)
     - Sum moduli: G_merged = G1 + G2
@@ -155,8 +155,6 @@ class ParameterClusterer:
         """
         Cluster one set of parameters (G or K).
         
-        EXACT translation of MATLAB clustering logic.
-        
         Args:
             tau: Relaxation times (including 0 for _inf term)
             vals: Moduli values
@@ -181,7 +179,7 @@ class ParameterClusterer:
             clustered_vals = [vals[0]]
             start_idx = 1
         
-        # Process remaining terms (EXACT from MATLAB)
+        # Process remaining terms 
         for i in range(start_idx, len(tau)):
             tau_i = tau[i]
             val_i = vals[i]

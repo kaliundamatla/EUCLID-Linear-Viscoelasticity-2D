@@ -14,12 +14,7 @@ class ViscoelasticMaterial:
     """
     Complete material definition with known Prony series parameters.
 
-    Generalized Maxwell model:
-        G(t) = G_ + � G_i * exp(-t/�_G_i)  [Deviatoric/Shear]
-        K(t) = K_ + � K_i * exp(-t/�_K_i)  [Volumetric/Bulk]
-
     Parameters are stored in ABSOLUTE form (MPa), not normalized.
-    This matches the MATLAB implementation (lines 9-22 of main_FEM...m).
     """
 
     def __init__(self,
@@ -83,10 +78,9 @@ class ViscoelasticMaterial:
         """
         Setup projection matrices for deviatoric-volumetric decomposition.
 
-        Plane stress: 3 components [�11, �22, �12]
-        Plane strain: 4 components [�11, �22, �33, �12]
+        Plane stress: 3 components 
+        Plane strain: 4 components 
 
-        Matches MATLAB lines 35-41 and inverse_problem/material.py lines 56-80.
         """
         if self.plane_stress:
             # Trace vector for plane stress
@@ -214,16 +208,15 @@ class ViscoelasticMaterial:
                 f"G0={self.G0:.1f} MPa, K0={self.K0:.1f} MPa)")
 
 
-def create_matlab_reference_material() -> ViscoelasticMaterial:
+def create_reference_material() -> ViscoelasticMaterial:
     """
-    Create material matching MATLAB reference (MAT3.5 from lines 8-22).
 
     This is the ground truth material for validation testing.
 
     Returns:
-        ViscoelasticMaterial with MATLAB parameters
+        ViscoelasticMaterial with parameters
     """
-    # From MATLAB lines 9-22
+    # From  lines 9-22
     G = np.array([200, 500, 1000])        # [MPa]
     tau_G = np.array([5.3, 50.1, 400.2])  # [s]
     G_inf = 1500                           # [MPa]
@@ -266,84 +259,4 @@ if __name__ == "__main__":
 
     print("="*70)
     print("MATERIAL MODEL TEST")
-    print("="*70)
-
-    # Test 1: MATLAB reference material
-    print("\n1. MATLAB Reference Material (MAT3.5):")
-    print("-" * 70)
-    mat_matlab = create_matlab_reference_material()
-    print(f"\n{mat_matlab}")
-    print(f"  G vector: {mat_matlab.G}")
-    print(f"  tau_G vector: {mat_matlab.tau_G}")
-    print(f"  Normalized g: {mat_matlab.g}")
-    print(f"  K vector: {mat_matlab.K}")
-    print(f"  tau_K vector: {mat_matlab.tau_K}")
-    print(f"  Normalized k: {mat_matlab.k}")
-
-    # Test 2: Simple material
-    print("\n2. Simple Test Material (Single Maxwell):")
-    print("-" * 70)
-    mat_simple = create_simple_test_material()
-    print(f"\n{mat_simple}")
-
-    # Test 3: Projection operators
-    print("\n3. Projection Operators:")
-    print("-" * 70)
-    print(f"\nTrace vector m:")
-    print(mat_matlab.m.T)
-    print(f"\nDeviatoric projector I_dev:")
-    print(mat_matlab.Idev)
-    print(f"\nVolumetric projector I_vol:")
-    print(mat_matlab.Ivol)
-    print(f"\nDeviatoric stiffness D_mu:")
-    print(mat_matlab.Dmu)
-
-    # Verify orthogonality
-    print(f"\nVerification:")
-    print(f"  I_dev + I_vol = I? {np.allclose(mat_matlab.Idev + mat_matlab.Ivol, np.eye(3))}")
-    print(f"  I_dev @ I_vol = 0? {np.allclose(mat_matlab.Idev @ mat_matlab.Ivol, 0)}")
-
-    # Test 4: Time integration factors
-    print("\n4. Time Integration Factors (dt = 0.1s):")
-    print("-" * 70)
-    dt = 0.1
-    exp_G, exp_K = mat_matlab.get_exponential_factors(dt)
-    w_G, w_K = mat_matlab.get_integration_weights(dt)
-
-    print(f"\nExponential factors:")
-    print(f"  exp(-dt/tau_G): {exp_G}")
-    print(f"  exp(-dt/tau_K): {exp_K}")
-    print(f"\nIntegration weights:")
-    print(f"  w_G: {w_G}")
-    print(f"  w_K: {w_K}")
-
-    # Test 5: Dictionary export/import
-    print("\n5. Dictionary Export/Import:")
-    print("-" * 70)
-    mat_dict = mat_matlab.to_dict()
-    print(f"Exported keys: {list(mat_dict.keys())}")
-
-    mat_restored = ViscoelasticMaterial.from_dict(mat_dict)
-    print(f"\nRestored material: {mat_restored}")
-    print(f"  Parameters match? {np.allclose(mat_matlab.G, mat_restored.G)}")
-
-    # Test 6: Plane strain
-    print("\n6. Plane Strain Material:")
-    print("-" * 70)
-    mat_strain = ViscoelasticMaterial(
-        G=np.array([200, 500]),
-        tau_G=np.array([5.0, 50.0]),
-        G_inf=1000,
-        K=np.array([400]),
-        tau_K=np.array([10.0]),
-        K_inf=1500,
-        plane_stress=False
-    )
-    print(f"\n{mat_strain}")
-    print(f"  m shape: {mat_strain.m.shape}")
-    print(f"  I_dev shape: {mat_strain.Idev.shape}")
-    print(f"  Number of components: {mat_strain.n_components}")
-
-    print("\n" + "="*70)
-    print("All tests passed!")
     print("="*70)

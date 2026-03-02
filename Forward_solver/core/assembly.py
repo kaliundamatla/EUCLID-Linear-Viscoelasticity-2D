@@ -15,7 +15,6 @@ class ForwardAssembler:
     """
     Assembles global stiffness matrix and force vectors for forward solver.
 
-    Matches MATLAB implementation (lines 635-637, 652-655).
     """
 
     def __init__(self, mesh, material: ViscoelasticMaterial, integrator: ForwardTimeIntegrator):
@@ -49,7 +48,6 @@ class ForwardAssembler:
             K_e = [G_inf + sum(G) - sum(G * dt/(2*tau_G + dt))] * B' * D_mu * B_d
                 + [K_inf + sum(K) - sum(K * dt/(2*tau_K + dt))] * b' * b
 
-        Matches MATLAB lines 306-308 (t=0) and 635-637 (t>0).
 
         Args:
             element_id: Element index
@@ -74,11 +72,11 @@ class ForwardAssembler:
         Dmu = self.material.Dmu  # (3, 3) deviatoric operator
 
         if is_first_timestep:
-            # Elastic stiffness at t=0 (MATLAB lines 306-308)
+            # Elastic stiffness at t=0 
             G_eff = self.material.G0  # G_inf + sum(G)
             K_eff = self.material.K0  # K_inf + sum(K)
         else:
-            # Viscoelastic stiffness for t>0 (MATLAB lines 635-637)
+            # Viscoelastic stiffness for t>0 
             # Effective moduli with relaxation correction
             weight_G = dt / (2 * self.material.tau_G + dt)  # (nG,)
             weight_K = dt / (2 * self.material.tau_K + dt)  # (nK,)
@@ -103,7 +101,6 @@ class ForwardAssembler:
 
         F_hist = B' * D_mu * sum(G_alpha * beta_G) + b' * sum(K_alpha * beta_K)
 
-        Matches MATLAB lines 652-655.
 
         Args:
             element_id: Element index

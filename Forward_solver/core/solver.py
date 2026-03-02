@@ -17,8 +17,6 @@ from .assembly import ForwardAssembler
 class BoundaryConditions:
     """
     Manages boundary conditions for forward solver.
-
-    Matches MATLAB implementation (lines 329-350, 692-702).
     """
 
     def __init__(self, mesh):
@@ -49,7 +47,7 @@ class BoundaryConditions:
         """
         Get DOFs with prescribed displacement (Dirichlet BCs).
 
-        Tensile creep test boundary conditions (MATLAB lines 339-350):
+        Tensile creep test boundary conditions 
         - Bottom edge: Uy=0 for ALL nodes (prevent vertical rigid body motion)
         - Bottom 2nd node: Ux=0 (prevent horizontal rigid body motion)
 
@@ -61,12 +59,10 @@ class BoundaryConditions:
         fixed_dofs = []
 
         # Bottom edge: fix vertical displacement for ALL nodes (Uy=0)
-        # MATLAB: lines 339-343
         dof_bottom_y = 2 * self.bottom_nodes + 1  # Uy = 0 for all bottom nodes
         fixed_dofs.extend(dof_bottom_y)
 
         # Bottom 2nd node ONLY: fix horizontal displacement (Ux=0) to prevent rigid motion
-        # MATLAB: lines 346-350 (for k = 2)
         if len(self.bottom_nodes) >= 2:
             dof_bottom_x_2nd = 2 * self.bottom_nodes[1]  # Ux = 0 for 2nd bottom node (index 1)
             fixed_dofs.append(dof_bottom_x_2nd)
@@ -91,7 +87,6 @@ class LoadingProtocol:
     Defines loading protocol for forward simulation.
 
     Applies traction (distributed load) on top boundary elements.
-    Matches MATLAB implementation (lines 758-789).
     """
 
     def __init__(self, mesh, load_magnitude: float = 50.0):
@@ -146,7 +141,6 @@ class LoadingProtocol:
         """
         Compute force vector with proper edge traction integration.
 
-        Matches MATLAB lines 758-789:
         - Traction q = [0, q0]' (no horizontal, vertical traction)
         - Edge integration using linear shape functions
         - fe = [0; 0; N2'*q*w*L; N3'*q*w*L] for edge 2-3
@@ -206,7 +200,6 @@ class ForwardSolver:
     Main forward solver engine.
 
     Performs time-stepping simulation with viscoelastic material.
-    Matches MATLAB main loop (lines 588-806).
     """
 
     def __init__(self,
@@ -255,8 +248,6 @@ class ForwardSolver:
     def solve_timestep_0(self):
         """
         Solve first timestep (t=0) with elastic response.
-
-        Matches MATLAB lines 258-500.
         """
         print(f"\nTimestep 0 (t=0.0s):")
 
@@ -293,8 +284,6 @@ class ForwardSolver:
     def solve_timestep(self, nt: int):
         """
         Solve timestep n > 0 with viscoelastic response.
-
-        Matches MATLAB lines 588-806.
 
         Args:
             nt: Timestep index (> 0)

@@ -212,7 +212,7 @@ class InverseProblem:
         Args:
             create_plots: Generate visualization plots
             apply_clustering: Apply parameter clustering after NNLS
-            clustering_range: Relative distance threshold for clustering (default 0.3 = MATLAB)
+            clustering_range: Relative distance threshold for clustering (default 0.3)
             output_path: Path to save figures (if None, uses experiment_number only)
 
         Returns:
