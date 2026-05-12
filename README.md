@@ -6,7 +6,7 @@
 
 ------
 
-> **TL;DR:** Given full-field displacement measurements and boundary forces from a tensile creep test, this framework recovers the complete viscoelastic Prony series (shear **G(t)** and bulk **K(t)**) with **< 1% relative error**, on any specimen geometry. No uniaxial material test required.
+> **TL;DR:** A Python implementation of the EUCLID framework for identifying linear viscoelastic Prony series parameters from full-field displacement measurements. Supports plain and complex specimen geometries, with synthetic validation achieving **< 1% parameter recovery error**.
 
 ![EUCLID Identification Pipeline](figures/EUCLID_identification_Pipeline.png)
 
