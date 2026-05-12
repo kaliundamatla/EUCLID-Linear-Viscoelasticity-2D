@@ -16,13 +16,13 @@ from core.boundary import BottomForceBC, TopBottomForce
 
 def main():
     # ========== CONFIGURATION ==========
-    EXPERIMENT_NUMBER = 800           # 800 = synthetic rectangle (coarse mesh)
+    EXPERIMENT_NUMBER = 822           # 800 = synthetic rectangle (coarse mesh)
                                       # 900 = preprocessed real PA6 data
-    N_MAXWELL_SHEAR = 150             # Number of shear Prony terms (nG)
-    N_MAXWELL_BULK = 150              # Number of bulk Prony terms (nK)
+    N_MAXWELL_SHEAR = 50             # Number of shear Prony terms (nG)
+    N_MAXWELL_BULK = 50              # Number of bulk Prony terms (nK)
     TAU_MIN = 1.0                     # Min relaxation time [s]
-    TAU_MAX = 600.0                   # Max relaxation time [s]
-    LAMBDA_INTERIOR = 0.0             # Interior equation weight (0=off, 1=on)
+    TAU_MAX = 1200.0                  # Max relaxation time [s]
+    LAMBDA_INTERIOR = 1.0             # Interior equation weight (0=off, 1=on)
     LAMBDA_BOUNDARY = 1.0             # Boundary equation weight
     BOUNDARY_CONDITION = 'TopBottomForce'  # 'TopBottomForce' or 'BottomForceBC'
     APPLY_CLUSTERING = True
@@ -57,7 +57,7 @@ def main():
     # ========== STEP 1: CREATE INVERSE PROBLEM ==========
     print("\n[1/3] Creating inverse problem...")
 
-    # Data path: standard_FE_dataset/ contains both synthetic and real preprocessed data
+    # Data path: synthetic_data/ for forward-solver generated experiments
     data_path = Path(__file__).parent.parent / "standard_FE_dataset"
     print(f"  Data source: {data_path / str(EXPERIMENT_NUMBER)}")
 

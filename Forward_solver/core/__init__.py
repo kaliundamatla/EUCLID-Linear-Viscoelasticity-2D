@@ -14,7 +14,7 @@ This package contains all core functionality for the forward viscoelastic solver
 
 from .material import (
     ViscoelasticMaterial,
-    create_matlab_reference_material,
+    create_reference_material,
     create_simple_test_material
 )
 from .mesh import MeshGenerator, Node, MeshLoader
@@ -29,7 +29,7 @@ from .mesh_converter import MeshConverter
 __all__ = [
     # Material models
     'ViscoelasticMaterial',
-    'create_matlab_reference_material',
+    'create_reference_material',
     'create_simple_test_material',
 
     # Mesh generation

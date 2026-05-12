@@ -58,23 +58,23 @@ if __name__ == "__main__":
     # EDIT THESE PARAMETERS AS NEEDED
     # ============================================================================
 
-    experiment_id = 811        # Experiment number (800-802: simple, 804-806: complex)
+    experiment_id = 822        # Experiment number (800-802: simple, 804-806: complex)
 
     # ---- Geometry Parameters ----
-    width = 24               # Domain width [mm]
-    height = 65.3              # Domain height [mm]
+    width = 22.83            # Domain width [mm]
+    height = 59.62             # Domain height [mm]
     nx = 12                   # Nodes in x direction (for simple geometry)
     ny = 30                  # Nodes in y direction (for simple geometry)
 
     # ---- Time Parameters ----
     dt = 1.0                   # Time step [s]
-    n_timesteps = 600         # Total number of timesteps
+    n_timesteps = 1200        # Total number of timesteps
 
     # ---- Loading ----
     load = 50.0                # Distributed load [N/mm] (positive = tension)
 
     # ---- Complex Geometry Options (for experiments 804-806) ----
-    use_complex_geometry = False   # False = simple structured mesh (for mesh convergence study)
+    use_complex_geometry = True    # False = simple structured mesh (for mesh convergence study)
     mesh_size_outer = None         # Element size at outer boundary [mm] (e.g., 2.0)
     mesh_size_hole = None          # Element size at hole boundary [mm] (e.g., 0.5)
 

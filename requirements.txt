@@ -5,3 +5,4 @@ matplotlib>=3.4
 scikit-learn>=0.24
 pygmsh>=7.1
 gmsh>=4.8
+meshio>=5.3

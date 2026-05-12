@@ -699,9 +699,9 @@ def run_full_simulation(
     print(f"  Load: {load} N/mm (tensile creep test)")
     print("="*70)
 
-    # Export to synthetic_data/{experiment_id}/ for direct use by inverse problem
+    # Export to standard_FE_dataset/{experiment_id}/ for direct use by inverse problem
     if output_name is None:
-        output_dir = Path(__file__).parent.parent.parent / "synthetic_data"
+        output_dir = Path(__file__).parent.parent.parent / "standard_FE_dataset"
         experiment_name = str(experiment_id)
     else:
         # Custom output name (for backwards compatibility)
@@ -749,7 +749,7 @@ def run_full_simulation(
 
         # Convert to EUCLID format
         print(f"\n  Converting to EUCLID format...")
-        temp_dir = Path(__file__).parent.parent.parent / "synthetic_data" / f"{experiment_id}_temp"
+        temp_dir = Path(__file__).parent.parent.parent / "standard_FE_dataset" / f"{experiment_id}_temp"
         converter = MeshConverter(mesh_obj, width, height)
         coord, conne = converter.convert()
         converter.save(coord, conne, temp_dir)
